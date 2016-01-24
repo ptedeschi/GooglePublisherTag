@@ -10,6 +10,6 @@
     d:DesignWidth="400">
 
     <Grid>
-        <WebView x:Name="webView"/>
+        <WebView x:Name="webView" />
     </Grid>
 </UserControl>
