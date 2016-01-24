@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>GooglePublisherTag</id>
-    <version>1.0.7</version>
+    <version>1.0.1</version>
     <authors>Patrick Tedeschi</authors>
     <owners>Patrick Tedeschi</owners>
     <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
@@ -17,6 +17,6 @@
   </metadata>
   <files>
     <!-- The double wildcard will also grab all the resource files and the resource subdirectory. -->
-	<file src="..\bin\Release\GooglePublisherTag**" target="lib\uap10.0" />
+	<file src="..\..\source\bin\Release\GooglePublisherTag**" target="lib\uap10.0" />
   </files>
 </package>
