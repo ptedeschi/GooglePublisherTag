@@ -13,7 +13,7 @@ To install Google Publisher Tag for UWP, run the following command in the Packag
 
 Inside your XAML page, add inside <i>Page</i> statement:
 
-    xmlns:controls="using:GooglePublisherTag
+    xmlns:controls="using:GooglePublisherTag"
 
 Put the control in the place you need:
 
