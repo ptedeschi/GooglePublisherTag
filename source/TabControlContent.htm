@@ -8,6 +8,7 @@
     <script type='text/javascript'>
         var googletag = googletag || {};
         googletag.cmd = googletag.cmd || [];
+        
         (function() {
             var gads = document.createElement('script');
             gads.async = true;
@@ -17,11 +18,13 @@
             var node = document.getElementsByTagName('script')[0];
             node.parentNode.insertBefore(gads, node);
         })();
+
         googletag.cmd.push(function() {
-            googletag.defineSlot('[##TAG##]', [
-                [##WIDTH##],
-                [##HEIGHT##]
-            ], 'div-google-ads').addService(googletag.pubads());
+            googletag.pubads().set("adsense_background_color", "FFFFFF");
+        });
+
+        googletag.cmd.push(function() {
+            googletag.defineSlot('[##TAG##]', [[##WIDTH##], [##HEIGHT##]], 'div-gpt-ad').addService(googletag.pubads());
             googletag.pubads().enableSingleRequest();
             googletag.enableServices();
         });
@@ -38,10 +41,10 @@
     </style>
 </head>
 <body>
-    <div id='div-google-ads' style='width:[##WIDTH##]px;height:[##HEIGHT##]px;'>
+    <div id='div-gpt-ad' style='width: [##WIDTH##]px; height: [##HEIGHT##]px;'>
         <script type='text/javascript'>
             googletag.cmd.push(function() {
-                googletag.display('div-google-ads');
+                googletag.display('div-gpt-ad');
             });
         </script>
     </div>
