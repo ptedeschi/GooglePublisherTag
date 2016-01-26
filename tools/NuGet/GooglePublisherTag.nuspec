@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>GooglePublisherTag</id>
-    <version>1.0.1</version>
+	<title>Google Publisher Tag</title>
+    <version>1.0.2</version>
     <authors>Patrick Tedeschi</authors>
     <owners>Patrick Tedeschi</owners>
     <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/ptedeschi/GooglePublisherTag</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Universal Windows Platform (UWP) control to allow the use of Google Publisher Tags into XAML.</description>
-    <releaseNotes>First release. Includes some basic control.</releaseNotes>
     <copyright>Copyright (c) 2016 Patrick Tedeschi.</copyright>
     <tags>Windows10 UWP GooglePublisherTags GPT DoubleClickforPublishers DFP</tags>
     <dependencies>
