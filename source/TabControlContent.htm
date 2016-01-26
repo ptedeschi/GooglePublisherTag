@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<!-- Based on xample of an asynchronous Google Publisher Tag -->
+<!-- https://support.google.com/dfp_sb/answer/1651549 -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type='text/javascript'>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+        (function() {
+            var gads = document.createElement('script');
+            gads.async = true;
+            gads.type = 'text/javascript';
+            var useSSL = 'https:' == document.location.protocol;
+            gads.src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js';
+            var node = document.getElementsByTagName('script')[0];
+            node.parentNode.insertBefore(gads, node);
+        })();
+        googletag.cmd.push(function() {
+            googletag.defineSlot('[##TAG##]', [
+                [##WIDTH##],
+                [##HEIGHT##]
+            ], 'div-google-ads').addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <style type='text/css'>
+        html, body {
+            margin: 0;
+            border: none;
+            overflow: hidden;
+            -ms-content-zooming: none;
+            background-color: transparent;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <div id='div-google-ads' style='width:[##WIDTH##]px;height:[##HEIGHT##]px;'>
+        <script type='text/javascript'>
+            googletag.cmd.push(function() {
+                googletag.display('div-google-ads');
+            });
+        </script>
+    </div>
+</body>
+</html>

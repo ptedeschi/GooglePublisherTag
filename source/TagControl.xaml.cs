@@ -27,6 +27,8 @@
 namespace GooglePublisherTag
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -51,19 +53,14 @@ namespace GooglePublisherTag
         public static readonly DependencyProperty HeightProperty = DependencyProperty.Register("Height", typeof(double), typeof(double), null);
 
         /// <summary>
-        /// Raw HTML data example of an asynchronous Google Publisher Tag.
-        /// </summary>
-        private const string RawData = "<html><head><script type='text/javascript'>var googletag = googletag || {};googletag.cmd = googletag.cmd || [];(function() {var gads = document.createElement('script');gads.async = true;gads.type = 'text/javascript';var useSSL = 'https:' == document.location.protocol;gads.src = (useSSL ? 'https:' : 'http:') +'//www.googletagservices.com/tag/js/gpt.js';var node = document.getElementsByTagName('script')[0];node.parentNode.insertBefore(gads, node);})();googletag.cmd.push(function() {googletag.defineSlot('[##TAG##]', [[##WIDTH##], [##HEIGHT##]], 'div-google-ads').addService(googletag.pubads());googletag.pubads().enableSingleRequest();googletag.enableServices();});</script><style type='text/css'>body {margin:0;border: none;overflow:hidden;}</style></head><body><div id='div-google-ads' style='width:[##WIDTH##]px;height:[##HEIGHT##]px;'><script type='text/javascript'>googletag.cmd.push(function() {googletag.display('div-google-ads');});</script></div></body></html>";
-
-        /// <summary>
         /// Initializes a new instance of the TagControl class.
         /// </summary>
         public TagControl()
         {
             this.InitializeComponent();
 
-            // Loads the ads from Google Publisher Tag
-            this.Load();
+            // Indicates to load content when the FrameworkElement is ready for interaction
+            this.Loaded += this.TagControl_Loaded;
         }
 
         /// <summary>
@@ -72,8 +69,8 @@ namespace GooglePublisherTag
         /// </summary>
         public string Tag
         {
-            get { return this.GetValue(TagProperty) as string; }
-            set { this.SetValue(TagProperty, value); }
+            get { return base.GetValue(TagProperty) as string; }
+            set { base.SetValue(TagProperty, value); }
         }
 
         /// <summary>
@@ -82,8 +79,8 @@ namespace GooglePublisherTag
         /// </summary>
         public double Width
         {
-            get { return (double)this.GetValue(WidthProperty); }
-            set { this.SetValue(WidthProperty, value); }
+            get { return (double)base.GetValue(WidthProperty); }
+            set { base.SetValue(WidthProperty, value); }
         }
 
         /// <summary>
@@ -92,8 +89,8 @@ namespace GooglePublisherTag
         /// </summary>
         public double Height
         {
-            get { return (double)this.GetValue(HeightProperty); }
-            set { this.SetValue(HeightProperty, value); }
+            get { return (double)base.GetValue(HeightProperty); }
+            set { base.SetValue(HeightProperty, value); }
         }
 
         /// <summary>
@@ -108,10 +105,10 @@ namespace GooglePublisherTag
 
             if (!string.IsNullOrWhiteSpace(tag) && width > 0 && height > 0)
             {
-                string data = RawData;
-                data = data.Replace("[##TAG##]", tag);
-                data = data.Replace("[##WIDTH##]", width.ToString());
-                data = data.Replace("[##HEIGHT##]", height.ToString());
+                string data = this.GetHtmlTemplate();
+                data = data.Replace(Constants.ReplaceTag, tag);
+                data = data.Replace(Constants.ReplaceWidth, width.ToString());
+                data = data.Replace(Constants.ReplaceHeight, height.ToString());
 
                 this.webView.Width = width;
                 this.webView.Height = height;
@@ -125,19 +122,50 @@ namespace GooglePublisherTag
         /// <param name="tag">The tag value value. It will have the form /NetworkCode/AdUnitCode.</param>
         /// <param name="width">The width size that the element will take.</param>
         /// <param name="height">The height size that the element will take.</param>
-        [Obsolete("Use the properties instead")]
+        [Obsolete("Use the properties instead via getter and setter")]
         public void Load(string tag, double width, double height)
         {
             if (!string.IsNullOrWhiteSpace(tag) && width > 0 && height > 0)
             {
-                string data = RawData;
-                data = data.Replace("[##TAG##]", tag);
-                data = data.Replace("[##WIDTH##]", width.ToString());
-                data = data.Replace("[##HEIGHT##]", height.ToString());
+                string data = this.GetHtmlTemplate();
+                data = data.Replace(Constants.ReplaceTag, tag);
+                data = data.Replace(Constants.ReplaceWidth, width.ToString());
+                data = data.Replace(Constants.ReplaceHeight, height.ToString());
 
                 this.webView.Width = width;
                 this.webView.Height = height;
                 this.webView.NavigateToString(data);
+            }
+        }
+
+        /// <summary>
+        /// Invoked when a FrameworkElement has been constructed and added to the object tree, and is ready for interaction.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Instance containing the event data</param>
+        private void TagControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Indicates that DoubleTapped event is not supported
+            this.webView.IsDoubleTapEnabled = false;
+
+            // Loads the ads from Google Publisher Tag
+            this.Load();
+        }
+
+        /// <summary>
+        /// Gets the Html template used to create an asynchronous Google Publisher Tag.
+        /// </summary>
+        /// <returns>The Html template source code.</returns>
+        private string GetHtmlTemplate()
+        {
+            var assembly = typeof(TagControl).GetTypeInfo().Assembly;
+
+            using (var stream = assembly.GetManifestResourceStream("GooglePublisherTag.TabControlContent.htm"))
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
             }
         }
     }
